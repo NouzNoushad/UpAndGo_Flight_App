@@ -82,11 +82,19 @@ class FlightSearchDelegate extends SearchDelegate {
           stream: flightSearchCubit.autoSuggestStream,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: Text(
+                  'No results found',
+                  style: TextStyle(color: CustomColors.background2),
+                ),
+              );
             }
             if (snapshot.data.length <= 0) {
               return const Center(
-                child: Text('No results found'),
+                child: Text(
+                  'No results found',
+                  style: TextStyle(color: CustomColors.background2),
+                ),
               );
             }
             return ListView.builder(
@@ -98,9 +106,9 @@ class FlightSearchDelegate extends SearchDelegate {
                   onTap: () {
                     textFieldType == TextFieldType.from
                         ? flightSearchCubit.flightFromController.text =
-                            flightSearchCubit.flightCode(flight.hierarchy)
+                            flightSearchCubit.flightCode(flight, textFieldType)
                         : flightSearchCubit.flightToController.text =
-                            flightSearchCubit.flightCode(flight.hierarchy);
+                            flightSearchCubit.flightCode(flight, textFieldType);
                     Navigator.pop(context);
                   },
                   child: Card(
@@ -110,7 +118,7 @@ class FlightSearchDelegate extends SearchDelegate {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            flightSearchCubit.flightCode(flight.hierarchy),
+                            flightSearchCubit.flightCode(flight, textFieldType),
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,

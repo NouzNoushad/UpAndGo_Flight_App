@@ -1,5 +1,6 @@
 import 'package:flight_booking/core/colors.dart';
 import 'package:flight_booking/core/constant.dart';
+import 'package:flight_booking/flight_search/screens/flight_home.dart';
 import 'package:flight_booking/flight_search/cubit/flight_search_cubit.dart';
 import 'package:flight_booking/flight_search/screens/search_delegate.dart';
 import 'package:flight_booking/flight_search/screens/travelers_details.dart';
@@ -223,9 +224,16 @@ class _FlightSearchState extends State<FlightSearch> {
                             elevation: 1,
                             borderRadius: BorderRadius.circular(10),
                             child: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
+                                var navigator = Navigator.of(context);
                                 if (formKey.currentState!.validate()) {
                                   formKey.currentState!.save();
+                                  await flightSearchCubit.initiateFlightPrice();
+                                  navigator.push(MaterialPageRoute(
+                                      builder: (context) => FlightHome(
+                                            flightSearchCubit:
+                                                flightSearchCubit,
+                                          )));
                                 }
                               },
                               child: Container(

@@ -9,7 +9,7 @@ class BaseClientService {
     'x-api-key': flightApiKey,
   };
 
-  Future<dynamic> post(String endpoint, String body) async {
+  Future<dynamic> post(String endpoint, [String? body]) async {
     var baseUrl = EndPoints.baseUrl;
     Uri url = Uri.parse('$baseUrl/$endpoint');
     print('/////////////// url, $url');

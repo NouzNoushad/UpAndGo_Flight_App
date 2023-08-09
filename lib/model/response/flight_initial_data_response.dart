@@ -40,14 +40,14 @@ class FlightInitialDataResponse {
 }
 
 class Content {
-  Results results;
-  Stats stats;
-  SortingOptions sortingOptions;
+  Results? results;
+  Stats? stats;
+  SortingOptions? sortingOptions;
 
   Content({
-    required this.results,
-    required this.stats,
-    required this.sortingOptions,
+    this.results,
+    this.stats,
+    this.sortingOptions,
   });
 
   factory Content.fromJson(Map<String, dynamic> json) => Content(
@@ -57,9 +57,9 @@ class Content {
       );
 
   Map<String, dynamic> toJson() => {
-        "results": results.toJson(),
-        "stats": stats.toJson(),
-        "sortingOptions": sortingOptions.toJson(),
+        "results": results?.toJson(),
+        "stats": stats?.toJson(),
+        "sortingOptions": sortingOptions?.toJson(),
       };
 }
 
@@ -67,19 +67,19 @@ class Results {
   Map<String, Itinerary> itineraries;
   Map<String, Leg> legs;
   Map<String, Segment> segments;
-  Map<String, Place> places;
+  Map<String, FlightPlace> places;
   Map<String, Carrier> carriers;
   Map<String, Agent> agents;
-  Alliances alliances;
+  Alliances? alliances;
 
   Results({
-    required this.itineraries,
-    required this.legs,
-    required this.segments,
-    required this.places,
-    required this.carriers,
-    required this.agents,
-    required this.alliances,
+    this.itineraries = const {},
+    this.legs = const {},
+    this.segments = const {},
+    this.places = const {},
+    this.carriers = const {},
+    this.agents = const {},
+    this.alliances,
   });
 
   factory Results.fromJson(Map<String, dynamic> json) => Results(
@@ -90,7 +90,7 @@ class Results {
         segments: Map.from(json["segments"])
             .map((k, v) => MapEntry<String, Segment>(k, Segment.fromJson(v))),
         places: Map.from(json["places"])
-            .map((k, v) => MapEntry<String, Place>(k, Place.fromJson(v))),
+            .map((k, v) => MapEntry<String, FlightPlace>(k, FlightPlace.fromJson(v))),
         carriers: Map.from(json["carriers"])
             .map((k, v) => MapEntry<String, Carrier>(k, Carrier.fromJson(v))),
         agents: Map.from(json["agents"])
@@ -111,32 +111,32 @@ class Results {
             .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
         "agents": Map.from(agents)
             .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
-        "alliances": alliances.toJson(),
+        "alliances": alliances?.toJson(),
       };
 }
 
 class Agent {
-  String name;
-  Type type;
-  String imageUrl;
-  int feedbackCount;
-  double rating;
+  String? name;
+  String? type;
+  String? imageUrl;
+  int? feedbackCount;
+  double? rating;
   RatingBreakdown? ratingBreakdown;
-  bool isOptimisedForMobile;
+  bool? isOptimisedForMobile;
 
   Agent({
-    required this.name,
-    required this.type,
-    required this.imageUrl,
-    required this.feedbackCount,
-    required this.rating,
+    this.name,
+    this.type,
+    this.imageUrl,
+    this.feedbackCount,
+    this.rating,
     this.ratingBreakdown,
-    required this.isOptimisedForMobile,
+    this.isOptimisedForMobile,
   });
 
   factory Agent.fromJson(Map<String, dynamic> json) => Agent(
         name: json["name"],
-        type: typeValues.map[json["type"]]!,
+        type: json["type"],
         imageUrl: json["imageUrl"],
         feedbackCount: json["feedbackCount"],
         rating: json["rating"]?.toDouble(),
@@ -148,7 +148,7 @@ class Agent {
 
   Map<String, dynamic> toJson() => {
         "name": name,
-        "type": typeValues.reverse[type],
+        "type": type,
         "imageUrl": imageUrl,
         "feedbackCount": feedbackCount,
         "rating": rating,
@@ -158,18 +158,18 @@ class Agent {
 }
 
 class RatingBreakdown {
-  int customerService;
-  int reliablePrices;
-  int clearExtraFees;
-  int easeOfBooking;
-  int other;
+  int? customerService;
+  int? reliablePrices;
+  int? clearExtraFees;
+  int? easeOfBooking;
+  int? other;
 
   RatingBreakdown({
-    required this.customerService,
-    required this.reliablePrices,
-    required this.clearExtraFees,
-    required this.easeOfBooking,
-    required this.other,
+    this.customerService,
+    this.reliablePrices,
+    this.clearExtraFees,
+    this.easeOfBooking,
+    this.other,
   });
 
   factory RatingBreakdown.fromJson(Map<String, dynamic> json) =>
@@ -190,13 +190,6 @@ class RatingBreakdown {
       };
 }
 
-enum Type { AGENT_TYPE_AIRLINE, AGENT_TYPE_TRAVEL_AGENT }
-
-final typeValues = EnumValues({
-  "AGENT_TYPE_AIRLINE": Type.AGENT_TYPE_AIRLINE,
-  "AGENT_TYPE_TRAVEL_AGENT": Type.AGENT_TYPE_TRAVEL_AGENT
-});
-
 class Alliances {
   Alliances();
 
@@ -206,20 +199,20 @@ class Alliances {
 }
 
 class Carrier {
-  String name;
-  String allianceId;
-  String imageUrl;
-  String iata;
-  String icao;
-  String displayCode;
+  String? name;
+  String? allianceId;
+  String? imageUrl;
+  String? iata;
+  String? icao;
+  String? displayCode;
 
   Carrier({
-    required this.name,
-    required this.allianceId,
-    required this.imageUrl,
-    required this.iata,
-    required this.icao,
-    required this.displayCode,
+    this.name,
+    this.allianceId,
+    this.imageUrl,
+    this.iata,
+    this.icao,
+    this.displayCode,
   });
 
   factory Carrier.fromJson(Map<String, dynamic> json) => Carrier(
@@ -247,8 +240,8 @@ class Itinerary {
   dynamic sustainabilityData;
 
   Itinerary({
-    required this.pricingOptions,
-    required this.legIds,
+    this.pricingOptions = const [],
+    this.legIds = const [],
     this.sustainabilityData,
   });
 
@@ -268,182 +261,147 @@ class Itinerary {
 }
 
 class PricingOption {
-  Price price;
-  List<AgentId> agentIds;
+  Price? price;
+  List<String> agentIds;
   List<Item> items;
-  TransferType transferType;
-  String id;
+  String? transferType;
+  String? id;
   dynamic pricingOptionFare;
 
   PricingOption({
-    required this.price,
-    required this.agentIds,
-    required this.items,
-    required this.transferType,
-    required this.id,
+    this.price,
+    this.agentIds = const [],
+    this.items = const [],
+    this.transferType,
+    this.id,
     this.pricingOptionFare,
   });
 
   factory PricingOption.fromJson(Map<String, dynamic> json) => PricingOption(
         price: Price.fromJson(json["price"]),
-        agentIds: List<AgentId>.from(
-            json["agentIds"].map((x) => agentIdValues.map[x]!)),
+        agentIds: List<String>.from(
+            json["agentIds"].map((x) => x)),
         items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
-        transferType: transferTypeValues.map[json["transferType"]]!,
+        transferType: json["transferType"],
         id: json["id"],
         pricingOptionFare: json["pricingOptionFare"],
       );
 
   Map<String, dynamic> toJson() => {
-        "price": price.toJson(),
+        "price": price?.toJson(),
         "agentIds":
-            List<dynamic>.from(agentIds.map((x) => agentIdValues.reverse[x])),
+            List<dynamic>.from(agentIds.map((x) => x)),
         "items": List<dynamic>.from(items.map((x) => x.toJson())),
-        "transferType": transferTypeValues.reverse[transferType],
+        "transferType": transferType,
         "id": id,
         "pricingOptionFare": pricingOptionFare,
       };
 }
 
-enum AgentId { EMTI, GOIB, GTIN }
-
-final agentIdValues = EnumValues(
-    {"emti": AgentId.EMTI, "goib": AgentId.GOIB, "gtin": AgentId.GTIN});
-
 class Item {
-  Price price;
-  AgentId agentId;
-  String deepLink;
+  Price? price;
+  String? agentId;
+  String? deepLink;
   List<Fare> fares;
 
   Item({
-    required this.price,
-    required this.agentId,
-    required this.deepLink,
-    required this.fares,
+    this.price,
+    this.agentId,
+    this.deepLink,
+    this.fares = const [],
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
         price: Price.fromJson(json["price"]),
-        agentId: agentIdValues.map[json["agentId"]]!,
+        agentId: json["agentId"],
         deepLink: json["deepLink"],
         fares: List<Fare>.from(json["fares"].map((x) => Fare.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "price": price.toJson(),
-        "agentId": agentIdValues.reverse[agentId],
+        "price": price?.toJson(),
+        "agentId": agentId,
         "deepLink": deepLink,
         "fares": List<dynamic>.from(fares.map((x) => x.toJson())),
       };
 }
 
 class Fare {
-  String segmentId;
-  BookingCode bookingCode;
-  String fareBasisCode;
+  String? segmentId;
+  String? bookingCode;
+  String? fareBasisCode;
 
   Fare({
-    required this.segmentId,
-    required this.bookingCode,
-    required this.fareBasisCode,
+    this.segmentId,
+    this.bookingCode,
+    this.fareBasisCode,
   });
 
   factory Fare.fromJson(Map<String, dynamic> json) => Fare(
         segmentId: json["segmentId"],
-        bookingCode: bookingCodeValues.map[json["bookingCode"]]!,
+        bookingCode: json["bookingCode"],
         fareBasisCode: json["fareBasisCode"],
       );
 
   Map<String, dynamic> toJson() => {
         "segmentId": segmentId,
-        "bookingCode": bookingCodeValues.reverse[bookingCode],
+        "bookingCode": bookingCode,
         "fareBasisCode": fareBasisCode,
       };
 }
 
-enum BookingCode { EMPTY, P }
-
-final bookingCodeValues =
-    EnumValues({"": BookingCode.EMPTY, "P": BookingCode.P});
-
 class Price {
-  String amount;
-  Unit unit;
-  UpdateStatus updateStatus;
+  String? amount;
+  String? unit;
+  String? updateStatus;
 
   Price({
-    required this.amount,
-    required this.unit,
-    required this.updateStatus,
+    this.amount,
+    this.unit,
+    this.updateStatus,
   });
 
   factory Price.fromJson(Map<String, dynamic> json) => Price(
         amount: json["amount"],
-        unit: unitValues.map[json["unit"]]!,
-        updateStatus: updateStatusValues.map[json["updateStatus"]]!,
+        unit: json["unit"],
+        updateStatus: json["updateStatus"],
       );
 
   Map<String, dynamic> toJson() => {
         "amount": amount,
-        "unit": unitValues.reverse[unit],
-        "updateStatus": updateStatusValues.reverse[updateStatus],
+        "unit": unit,
+        "updateStatus": updateStatus,
       };
 }
 
-enum Unit { PRICE_UNIT_MILLI, PRICE_UNIT_UNSPECIFIED }
-
-final unitValues = EnumValues({
-  "PRICE_UNIT_MILLI": Unit.PRICE_UNIT_MILLI,
-  "PRICE_UNIT_UNSPECIFIED": Unit.PRICE_UNIT_UNSPECIFIED
-});
-
-enum UpdateStatus { PRICE_UPDATE_STATUS_UNSPECIFIED }
-
-final updateStatusValues = EnumValues({
-  "PRICE_UPDATE_STATUS_UNSPECIFIED":
-      UpdateStatus.PRICE_UPDATE_STATUS_UNSPECIFIED
-});
-
-enum TransferType {
-  TRANSFER_TYPE_MANAGED,
-  TRANSFER_TYPE_PROTECTED_SELF_TRANSFER
-}
-
-final transferTypeValues = EnumValues({
-  "TRANSFER_TYPE_MANAGED": TransferType.TRANSFER_TYPE_MANAGED,
-  "TRANSFER_TYPE_PROTECTED_SELF_TRANSFER":
-      TransferType.TRANSFER_TYPE_PROTECTED_SELF_TRANSFER
-});
-
 class Leg {
-  String originPlaceId;
-  String destinationPlaceId;
-  DateTime departureDateTime;
-  DateTime arrivalDateTime;
-  int durationInMinutes;
-  int stopCount;
+  String? originPlaceId;
+  String? destinationPlaceId;
+  DateTimeType? departureDateTime;
+  DateTimeType? arrivalDateTime;
+  int? durationInMinutes;
+  int? stopCount;
   List<String> marketingCarrierIds;
   List<String> operatingCarrierIds;
   List<String> segmentIds;
 
   Leg({
-    required this.originPlaceId,
-    required this.destinationPlaceId,
-    required this.departureDateTime,
-    required this.arrivalDateTime,
-    required this.durationInMinutes,
-    required this.stopCount,
-    required this.marketingCarrierIds,
-    required this.operatingCarrierIds,
-    required this.segmentIds,
+    this.originPlaceId,
+    this.destinationPlaceId,
+    this.departureDateTime,
+    this.arrivalDateTime,
+    this.durationInMinutes,
+    this.stopCount,
+    this.marketingCarrierIds = const [],
+    this.operatingCarrierIds = const [],
+    this.segmentIds = const [],
   });
 
   factory Leg.fromJson(Map<String, dynamic> json) => Leg(
         originPlaceId: json["originPlaceId"],
         destinationPlaceId: json["destinationPlaceId"],
-        departureDateTime: DateTime.fromJson(json["departureDateTime"]),
-        arrivalDateTime: DateTime.fromJson(json["arrivalDateTime"]),
+        departureDateTime: DateTimeType.fromJson(json["departureDateTime"]),
+        arrivalDateTime: DateTimeType.fromJson(json["arrivalDateTime"]),
         durationInMinutes: json["durationInMinutes"],
         stopCount: json["stopCount"],
         marketingCarrierIds:
@@ -456,8 +414,8 @@ class Leg {
   Map<String, dynamic> toJson() => {
         "originPlaceId": originPlaceId,
         "destinationPlaceId": destinationPlaceId,
-        "departureDateTime": departureDateTime.toJson(),
-        "arrivalDateTime": arrivalDateTime.toJson(),
+        "departureDateTime": departureDateTime?.toJson(),
+        "arrivalDateTime": arrivalDateTime?.toJson(),
         "durationInMinutes": durationInMinutes,
         "stopCount": stopCount,
         "marketingCarrierIds":
@@ -468,24 +426,24 @@ class Leg {
       };
 }
 
-class DateTime {
-  int year;
-  int month;
-  int day;
-  int hour;
-  int minute;
-  int second;
+class DateTimeType {
+  int? year;
+  int? month;
+  int? day;
+  int? hour;
+  int? minute;
+  int? second;
 
-  DateTime({
-    required this.year,
-    required this.month,
-    required this.day,
-    required this.hour,
-    required this.minute,
-    required this.second,
+  DateTimeType({
+    this.year,
+    this.month,
+    this.day,
+    this.hour,
+    this.minute,
+    this.second,
   });
 
-  factory DateTime.fromJson(Map<String, dynamic> json) => DateTime(
+  factory DateTimeType.fromJson(Map<String, dynamic> json) => DateTimeType(
         year: json["year"],
         month: json["month"],
         day: json["day"],
@@ -504,24 +462,24 @@ class DateTime {
       };
 }
 
-class Place {
-  String entityId;
-  String parentId;
-  String name;
-  String type;
-  String iata;
+class FlightPlace {
+  String? entityId;
+  String? parentId;
+  String? name;
+  String? type;
+  String? iata;
   dynamic coordinates;
 
-  Place({
-    required this.entityId,
-    required this.parentId,
-    required this.name,
-    required this.type,
-    required this.iata,
+  FlightPlace({
+    this.entityId,
+    this.parentId,
+    this.name,
+    this.type,
+    this.iata,
     this.coordinates,
   });
 
-  factory Place.fromJson(Map<String, dynamic> json) => Place(
+  factory FlightPlace.fromJson(Map<String, dynamic> json) => FlightPlace(
         entityId: json["entityId"],
         parentId: json["parentId"],
         name: json["name"],
@@ -541,31 +499,31 @@ class Place {
 }
 
 class Segment {
-  String originPlaceId;
-  String destinationPlaceId;
-  DateTime departureDateTime;
-  DateTime arrivalDateTime;
-  int durationInMinutes;
-  String marketingFlightNumber;
-  String marketingCarrierId;
-  String operatingCarrierId;
+  String? originPlaceId;
+  String? destinationPlaceId;
+  DateTimeType? departureDateTime;
+  DateTimeType? arrivalDateTime;
+  int? durationInMinutes;
+  String? marketingFlightNumber;
+  String? marketingCarrierId;
+  String? operatingCarrierId;
 
   Segment({
-    required this.originPlaceId,
-    required this.destinationPlaceId,
-    required this.departureDateTime,
-    required this.arrivalDateTime,
-    required this.durationInMinutes,
-    required this.marketingFlightNumber,
-    required this.marketingCarrierId,
-    required this.operatingCarrierId,
+    this.originPlaceId,
+    this.destinationPlaceId,
+    this.departureDateTime,
+    this.arrivalDateTime,
+    this.durationInMinutes,
+    this.marketingFlightNumber,
+    this.marketingCarrierId,
+    this.operatingCarrierId,
   });
 
   factory Segment.fromJson(Map<String, dynamic> json) => Segment(
         originPlaceId: json["originPlaceId"],
         destinationPlaceId: json["destinationPlaceId"],
-        departureDateTime: DateTime.fromJson(json["departureDateTime"]),
-        arrivalDateTime: DateTime.fromJson(json["arrivalDateTime"]),
+        departureDateTime: DateTimeType.fromJson(json["departureDateTime"]),
+        arrivalDateTime: DateTimeType.fromJson(json["arrivalDateTime"]),
         durationInMinutes: json["durationInMinutes"],
         marketingFlightNumber: json["marketingFlightNumber"],
         marketingCarrierId: json["marketingCarrierId"],
@@ -575,8 +533,8 @@ class Segment {
   Map<String, dynamic> toJson() => {
         "originPlaceId": originPlaceId,
         "destinationPlaceId": destinationPlaceId,
-        "departureDateTime": departureDateTime.toJson(),
-        "arrivalDateTime": arrivalDateTime.toJson(),
+        "departureDateTime": departureDateTime?.toJson(),
+        "arrivalDateTime": arrivalDateTime?.toJson(),
         "durationInMinutes": durationInMinutes,
         "marketingFlightNumber": marketingFlightNumber,
         "marketingCarrierId": marketingCarrierId,
@@ -590,9 +548,9 @@ class SortingOptions {
   List<Est> fastest;
 
   SortingOptions({
-    required this.best,
-    required this.cheapest,
-    required this.fastest,
+    this.best = const [],
+    this.cheapest = const [],
+    this.fastest = const [],
   });
 
   factory SortingOptions.fromJson(Map<String, dynamic> json) => SortingOptions(
@@ -609,12 +567,12 @@ class SortingOptions {
 }
 
 class Est {
-  double score;
-  String itineraryId;
+  double? score;
+  String? itineraryId;
 
   Est({
-    required this.score,
-    required this.itineraryId,
+    this.score,
+    this.itineraryId,
   });
 
   factory Est.fromJson(Map<String, dynamic> json) => Est(
@@ -629,10 +587,10 @@ class Est {
 }
 
 class Stats {
-  Itineraries itineraries;
+  Itineraries? itineraries;
 
   Stats({
-    required this.itineraries,
+    this.itineraries,
   });
 
   factory Stats.fromJson(Map<String, dynamic> json) => Stats(
@@ -640,23 +598,23 @@ class Stats {
       );
 
   Map<String, dynamic> toJson() => {
-        "itineraries": itineraries.toJson(),
+        "itineraries": itineraries?.toJson(),
       };
 }
 
 class Itineraries {
-  int minDuration;
-  int maxDuration;
-  Total total;
-  Stops stops;
-  bool hasChangeAirportTransfer;
+  int? minDuration;
+  int? maxDuration;
+  Total? total;
+  Stops? stops;
+  bool? hasChangeAirportTransfer;
 
   Itineraries({
-    required this.minDuration,
-    required this.maxDuration,
-    required this.total,
-    required this.stops,
-    required this.hasChangeAirportTransfer,
+    this.minDuration,
+    this.maxDuration,
+    this.total,
+    this.stops,
+    this.hasChangeAirportTransfer,
   });
 
   factory Itineraries.fromJson(Map<String, dynamic> json) => Itineraries(
@@ -670,21 +628,21 @@ class Itineraries {
   Map<String, dynamic> toJson() => {
         "minDuration": minDuration,
         "maxDuration": maxDuration,
-        "total": total.toJson(),
-        "stops": stops.toJson(),
+        "total": total?.toJson(),
+        "stops": stops?.toJson(),
         "hasChangeAirportTransfer": hasChangeAirportTransfer,
       };
 }
 
 class Stops {
-  Direct direct;
-  Direct oneStop;
-  Direct twoPlusStops;
+  Direct? direct;
+  Direct? oneStop;
+  Direct? twoPlusStops;
 
   Stops({
-    required this.direct,
-    required this.oneStop,
-    required this.twoPlusStops,
+    this.direct,
+    this.oneStop,
+    this.twoPlusStops,
   });
 
   factory Stops.fromJson(Map<String, dynamic> json) => Stops(
@@ -694,19 +652,19 @@ class Stops {
       );
 
   Map<String, dynamic> toJson() => {
-        "direct": direct.toJson(),
-        "oneStop": oneStop.toJson(),
-        "twoPlusStops": twoPlusStops.toJson(),
+        "direct": direct?.toJson(),
+        "oneStop": oneStop?.toJson(),
+        "twoPlusStops": twoPlusStops?.toJson(),
       };
 }
 
 class Direct {
-  Total total;
-  TicketTypes ticketTypes;
+  Total? total;
+  TicketTypes? ticketTypes;
 
   Direct({
-    required this.total,
-    required this.ticketTypes,
+    this.total,
+    this.ticketTypes,
   });
 
   factory Direct.fromJson(Map<String, dynamic> json) => Direct(
@@ -715,20 +673,20 @@ class Direct {
       );
 
   Map<String, dynamic> toJson() => {
-        "total": total.toJson(),
-        "ticketTypes": ticketTypes.toJson(),
+        "total": total?.toJson(),
+        "ticketTypes": ticketTypes?.toJson(),
       };
 }
 
 class TicketTypes {
-  Total singleTicket;
-  Total multiTicketNonNpt;
-  Total multiTicketNpt;
+  Total? singleTicket;
+  Total? multiTicketNonNpt;
+  Total? multiTicketNpt;
 
   TicketTypes({
-    required this.singleTicket,
-    required this.multiTicketNonNpt,
-    required this.multiTicketNpt,
+    this.singleTicket,
+    this.multiTicketNonNpt,
+    this.multiTicketNpt,
   });
 
   factory TicketTypes.fromJson(Map<String, dynamic> json) => TicketTypes(
@@ -738,19 +696,19 @@ class TicketTypes {
       );
 
   Map<String, dynamic> toJson() => {
-        "singleTicket": singleTicket.toJson(),
-        "multiTicketNonNpt": multiTicketNonNpt.toJson(),
-        "multiTicketNpt": multiTicketNpt.toJson(),
+        "singleTicket": singleTicket?.toJson(),
+        "multiTicketNonNpt": multiTicketNonNpt?.toJson(),
+        "multiTicketNpt": multiTicketNpt?.toJson(),
       };
 }
 
 class Total {
-  int count;
-  Price minPrice;
+  int? count;
+  Price? minPrice;
 
   Total({
-    required this.count,
-    required this.minPrice,
+    this.count,
+    this.minPrice,
   });
 
   factory Total.fromJson(Map<String, dynamic> json) => Total(
@@ -760,18 +718,6 @@ class Total {
 
   Map<String, dynamic> toJson() => {
         "count": count,
-        "minPrice": minPrice.toJson(),
+        "minPrice": minPrice?.toJson(),
       };
-}
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

@@ -4,11 +4,13 @@ import 'package:flight_booking/model/request/auto_suggest_request.dart';
 import 'package:flight_booking/model/response/auto_suggest_response.dart';
 
 import '../../model/request/flight_initial_data_request.dart';
+import '../../model/response/flight_initial_data_response.dart';
 
 class FlightSearchService {
   BaseClientService baseClientService = BaseClientService();
 
-  Future<AutoSuggestResponse> autoSuggestFlight(String searchTerm) async {
+  Future<AutoSuggestResponse?> autoSuggestFlight(String searchTerm) async {
+    AutoSuggestResponse? suggestions;
     List<String> includedEntityTypes = [
       "PLACE_TYPE_CITY",
       "PLACE_TYPE_AIRPORT"
@@ -22,11 +24,13 @@ class FlightSearchService {
     var response = await baseClientService.post(
         EndPoints.autosuggest, autoSuggestRequestToJson(autoSuggestRequest));
     print('/////////////////////// Suggestion Response: $response');
-    AutoSuggestResponse suggestions = autoSuggestResponseFromJson(response);
+    if (response != null) {
+      suggestions = autoSuggestResponseFromJson(response);
+    }
     return suggestions;
   }
 
-  initiateFlightPrice(
+  Future<FlightInitialDataResponse?> initiateFlightPrice(
       {required String originIata,
       required String destinationIata,
       required int year,
@@ -35,6 +39,7 @@ class FlightSearchService {
       required int adults,
       List<int>? childrenAges,
       required String cabinClass}) async {
+    FlightInitialDataResponse? flightInitialDataResponse;
     NPlaceId originPlaceId = NPlaceId(iata: originIata);
     NPlaceId destinationPlaceId = NPlaceId(iata: destinationIata);
     Date date = Date(year: year, month: month, day: day);
@@ -56,5 +61,20 @@ class FlightSearchService {
     var response = await baseClientService.post(EndPoints.initialFlightPrice,
         flightInitialDataRequestToJson(flightInitialDataRequest));
     print('/////////////////////// Flight Response: $response');
+    if (response != null) {
+      flightInitialDataResponse = flightInitialDataResponseFromJson(response);
+    }
+    return flightInitialDataResponse;
+  }
+
+  Future<FlightInitialDataResponse?> fullFlightPrice({required String sessionToken}) async {
+    FlightInitialDataResponse? flightFullDataResponse;
+    var response = await baseClientService
+        .post('${EndPoints.fullFlightPrice}/$sessionToken');
+    print('/////////////////////// Full Response: $response');
+    if (response != null) {
+      flightFullDataResponse = flightInitialDataResponseFromJson(response);
+    }
+    return flightFullDataResponse;
   }
 }

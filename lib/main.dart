@@ -25,11 +25,9 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
-        create: (context) => FlightSearchCubit(
-          flightSearchService: FlightSearchService()
-        ),
-        child: const FlightSearch(),
-      ),
+          create: (context) =>
+              FlightSearchCubit(flightSearchService: FlightSearchService()),
+          child: const FlightSearch()),
     );
   }
 }
